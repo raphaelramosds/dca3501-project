@@ -20,20 +20,26 @@ data "google_iam_policy" "public_invoker" {
   }
 }
 
-resource "google_cloudbuild_trigger" "streamlit_app_build" {
-  name     = "streamlit_app_build"
-  project  = var.project
-  location = var.region
+resource "google_cloudbuild_trigger" "streamlit-app-build" {
+  name            = "streamlit-app-build"
+  project         = var.project
+  location        = var.region
+  service_account = "projects/${var.project}/serviceAccounts/cloud-build-service-account@sample-project-460722.iam.gserviceaccount.com"
+  filename        = "streamlit/cloudbuild.yaml"
 
   github {
     owner = "raphaelramosds"
-    name  = "dca3501-project" # NOTE: one must connect this repo on the console at Cloud Build / Triggers / Connect repository
+    # NOTE: You MUST connect this repo on GCP console at Cloud Build / Triggers / Connect repository
+    name = "dca3501-project"
     push {
       branch = "main"
     }
   }
-  
-  filename = "streamlit/cloudbuild.yaml"
+
+  approval_config {
+    approval_required = true
+  }
+
 }
 
 resource "google_cloud_run_service" "streamlit-app" {
