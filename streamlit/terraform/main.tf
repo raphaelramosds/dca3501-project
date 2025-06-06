@@ -29,8 +29,7 @@ resource "google_cloudbuild_trigger" "streamlit-app-build" {
 
   github {
     owner = "raphaelramosds"
-    # NOTE: You MUST connect this repo on GCP console at Cloud Build / Triggers / Connect repository
-    name = "dca3501-project"
+    name  = "dca3501-project" # NOTE: You MUST connect this repo on GCP console at Cloud Build / Triggers / Connect repository
     push {
       branch = "main"
     }
@@ -40,6 +39,7 @@ resource "google_cloudbuild_trigger" "streamlit-app-build" {
     approval_required = true
   }
 
+  depends_on = [ google_project_service.enable_services ]
 }
 
 resource "google_cloud_run_service" "streamlit-app" {
@@ -59,6 +59,8 @@ resource "google_cloud_run_service" "streamlit-app" {
     percent         = 100
     latest_revision = true
   }
+
+  depends_on = [ google_project_service.enable_services ]
 }
 
 resource "google_cloud_run_service_iam_policy" "public-access" {
