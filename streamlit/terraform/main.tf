@@ -51,6 +51,9 @@ resource "google_cloud_run_service" "streamlit-app" {
     spec {
       containers {
         image = "us-central1-docker.pkg.dev/sample-project-460722/sample-project-repository/streamlit-app"
+        ports {
+          container_port = 8501
+        }
       }
     }
   }
