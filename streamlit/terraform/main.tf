@@ -39,7 +39,7 @@ resource "google_cloudbuild_trigger" "streamlit-app-build" {
     approval_required = true
   }
 
-  depends_on = [ google_project_service.enable_services ]
+  depends_on = [google_project_service.enable_services]
 }
 
 resource "google_cloud_run_service" "streamlit-app" {
@@ -63,10 +63,11 @@ resource "google_cloud_run_service" "streamlit-app" {
     latest_revision = true
   }
 
-  depends_on = [ google_project_service.enable_services ]
+  depends_on = [google_project_service.enable_services]
 }
 
 resource "google_cloud_run_service_iam_policy" "public-access" {
+  project     = var.project
   service     = google_cloud_run_service.streamlit-app.name
   location    = google_cloud_run_service.streamlit-app.location
   policy_data = data.google_iam_policy.public_invoker.policy_data
