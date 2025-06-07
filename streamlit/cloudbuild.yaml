@@ -28,7 +28,7 @@ steps:
       '--port',
       '8501',
       '--service-account',
-      '${_CI_SERVICE_ACCOUNT_ID}',
+      '${_CI_SERVICE_ACCOUNT_EMAIL}',
       '--allow-unauthenticated',
     ]
     
