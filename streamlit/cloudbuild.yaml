@@ -1,12 +1,39 @@
 steps:
+  # Build image
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'us-central1-docker.pkg.dev/sample-project-460722/sample-project-repository/streamlit-app', './streamlit' ]
+    args: [
+      'build',
+      '-t',
+      '${_CI_IMAGE}',
+      './streamlit',
+    ]
 
+  # Push image on Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'push', 'us-central1-docker.pkg.dev/sample-project-460722/sample-project-repository/streamlit-app' ]
+    args: [
+      'push',
+      '${_CI_IMAGE}',
+    ]
+
+  # Deploy image on Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: [
+      'run',
+      'deploy',
+      '${_CI_SERVICE_NAME}',
+      '--image',
+      '${_CI_IMAGE}',
+      '--region',
+      '${_CI_REGION}',
+      '--port',
+      '8501',
+      '--service-account',
+      '${_CI_SERVICE_ACCOUNT_ID}',
+      '--allow-unauthenticated',
+    ]
     
 images:
-  - 'us-central1-docker.pkg.dev/sample-project-460722/sample-project-repository/streamlit-app'
+  - '${_CI_IMAGE}'
 
 options:
   logging: CLOUD_LOGGING_ONLY
