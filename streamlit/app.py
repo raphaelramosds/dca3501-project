@@ -1,26 +1,19 @@
-from collections import namedtuple
-import altair as alt
-import math
-import pandas as pd
 import streamlit as st
+from tabs.dashboard import render_dashboard
+from tabs.reports import render_reports
+from tabs.settings import render_settings
 
-with st.echo(code_location='below'):
-   total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
-   num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
+st.set_page_config(page_title="India Weather Dashboard", layout="wide")
 
-   Point = namedtuple('Point', 'x y')
-   data = []
+st.title("India Weather Dashboard Analysis 🌤️")
 
-   points_per_turn = total_points / num_turns
+tabs = st.tabs(["📊 Cities AQI", "📈 Weather Polutants", "⚙️ Configuration"])
 
-   for curr_point_num in range(total_points):
-      curr_turn, i = divmod(curr_point_num, points_per_turn)
-      angle = (curr_turn + 1) * 2 * math.pi * i / points_per_turn
-      radius = curr_point_num / total_points
-      x = radius * math.cos(angle)
-      y = radius * math.sin(angle)
-      data.append(Point(x, y))
+with tabs[0]:
+    render_dashboard()
 
-   st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-      .mark_circle(color='#0068c9', opacity=0.5)
-      .encode(x='x:Q', y='y:Q'))
+with tabs[1]:
+    render_reports()
+
+with tabs[2]:
+    render_settings()
