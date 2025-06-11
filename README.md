@@ -32,3 +32,7 @@ PS - Corresponde a 25% da primeira avaliação.
 
 - Utilizando a base de dados da tarefa anterior, desenvolver uma análise exploratória de dados (EDA), num notebook Colab, visando apresentar evidências/respostas para as questões levantadas na etapa anterior. 
 - Utilize gráficos estatísticos para embasar suas análises.
+
+### Trabalho 2
+
+Desenvolvimento de um dashboard contendo as principais informações obtidas na EDA do Trabalho. O dashboard deve conter gráficos interativos e ser disponibilizado num site web. 
