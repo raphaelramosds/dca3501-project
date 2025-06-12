@@ -50,6 +50,10 @@ fig = px.sunburst(
     title="Distribuição de AQI por Categoria e Cidade"
 )
 
+fig.update_layout(
+    height=600,
+)
+
 # Mostrar no Streamlit
 def render_sunburst_aqi():
     st.subheader("🌞 Gráfico Sunburst de AQI por Cidade")
