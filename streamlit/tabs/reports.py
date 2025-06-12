@@ -1,5 +1,5 @@
 import streamlit as st
+import components.series_aqi_polutants as series_aqi_polutants
 
 def render_reports():
-    st.subheader("Relatórios")
-    st.write("Aqui vão os relatórios detalhados.")
+    series_aqi_polutants.render_series_polutants()
