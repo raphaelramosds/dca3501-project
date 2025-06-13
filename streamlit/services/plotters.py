@@ -5,37 +5,30 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+from services.adapters import DataFrameAdapter
+
 
 class Plotter(ABC):
-    dataframe: type[BaseDataFrame]
+    dataframe: type[BaseDataFrame]  # Should be set by subclass
 
     def __init__(self, filters: dict = {}):
         self.filters: dict = filters
-        self.df: pd.DataFrame = self.dataframe.mount()
-        if filters:
-            self.df = self.filter()
+
+        # Use adapter to mount and filter data
+        self.adapter = DataFrameAdapter(self.dataframe, self.filters)
+        self.df: pd.DataFrame = self.adapter.filter()
 
     def render(self):
         self.plot()
-
-    # TODO: filtering should be BaseDataFrame responsibility
-    @abstractmethod
-    def filter(self) -> pd.DataFrame:
-        pass
 
     @abstractmethod
     def plot(self):
         pass
 
 
+
 class AqiMapPlotter(Plotter):
     dataframe = AnnualAqiDataFrame
-
-    def filter(self):
-        df_filtered = self.df.copy()
-        if 'year' in self.filters:
-            df_filtered = df_filtered[df_filtered['Year'] == self.filters['year']]
-        return df_filtered
 
     def plot(self):
         fig = px.scatter_mapbox(
@@ -63,12 +56,6 @@ class AqiMapPlotter(Plotter):
 class AqiSunburstPlotter(Plotter):
     dataframe = AnnualAqiDataFrame
 
-    def filter(self):
-        df_filtered = self.df.copy()
-        if 'year' in self.filters:
-            df_filtered = df_filtered[df_filtered['Year'] == self.filters['year']]
-        return df_filtered
-
     def plot(self):
         fig = px.sunburst(
             self.df,
@@ -94,9 +81,6 @@ class AqiSunburstPlotter(Plotter):
 
 class SeriesAqiParticlesPlotter(Plotter):
     dataframe = MonthlyAqiParticlesDataFrame
-
-    def filter(self):
-        return super().filter()
     
     def plot(self):
 
