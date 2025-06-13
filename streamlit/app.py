@@ -3,31 +3,41 @@ import streamlit as st
 from services.dataframes import AnnualAqiDataFrame
 from services.plotters import *
 
-st.set_page_config(page_title="India Weather Dashboard", layout="wide", page_icon="https://hatscripts.github.io/circle-flags/flags/in.svg")
+title = "Qualidade do Ar na Índia"
 
-
-st.title("India Weather Dashboard Analysis 🌤️")
-
-tabs = st.tabs(
-    [
-        "📊 Cities AQI",
-        "📈 Weather Polutants",
-    ]
+st.set_page_config(
+    page_title=title,
+    layout="wide",
+    page_icon="public/in.svg",
 )
 
 
-@st.cache_data
-def render_series():
-    SeriesAqiParticlesPlotter({}).render()
+st.title("{} 🌤️".format(title))
 
+tabs = st.tabs(
+    [
+        "📊 IQA Anual",
+        "📈 IQA x Matéria Particulada (PM)",
+    ]
+)
 
+# Tab IQA Anual
 with tabs[0]:
     col1, col2 = st.columns(2)
-    with col1:    
+    with col1:
         cities = st.multiselect(
             "Escolha uma Cidade",
             options=AnnualAqiDataFrame.mount()["City"].unique(),
-            default=['Ahmedabad','Amritsar', 'Chennai', 'Delhi', 'Jaipur', 'Lucknow', 'Mumbai','Patna'],
+            default=[
+                "Ahmedabad",
+                "Amritsar",
+                "Chennai",
+                "Delhi",
+                "Jaipur",
+                "Lucknow",
+                "Mumbai",
+                "Patna",
+            ],
             key="city",
         )
     with col2:
@@ -35,16 +45,19 @@ with tabs[0]:
             "Escolha um Ano",
             options=AnnualAqiDataFrame.mount()["Year"].unique(),
         )
-        
+
     col1, col2 = st.columns(2)
     with col1:
         AqiMapPlotter({"year": year, "city": cities}).render()
     with col2:
-        AqiSunburstPlotter({"year": year,  "city": cities}).render()
+        AqiSunburstPlotter({"year": year, "city": cities}).render()
 
+
+@st.cache_data
+def render_series():
+    SeriesAqiParticlesPlotter({}).render()
+
+
+# Tab IQA x Matéria Particulada
 with tabs[1]:
     render_series()
-    # SeriesAqiParticlesPlotter({}).render()
-
-# with tabs[2]:
-#     render_settings()
