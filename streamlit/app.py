@@ -1,9 +1,5 @@
 import streamlit as st
 
-# from tabs.dashboard import render_dashboard
-# from tabs.reports import render_reports
-# from tabs.settings import render_settings
-
 from services.dataframes import AnnualAqiDataFrame
 from services.plotters import *
 
@@ -15,7 +11,6 @@ tabs = st.tabs(
     [
         "📊 Cities AQI",
         "📈 Weather Polutants",
-        # "⚙️ Configuration"
     ]
 )
 
@@ -26,16 +21,25 @@ def render_series():
 
 
 with tabs[0]:
-    # TODO: transform into dropdown
-    year = st.select_slider(
-        "Escolha um Ano",
-        options=AnnualAqiDataFrame.mount()["Year"].unique(),
-    )
+    col1, col2 = st.columns(2)
+    with col1:    
+        cities = st.multiselect(
+            "Escolha uma Cidade",
+            options=AnnualAqiDataFrame.mount()["City"].unique(),
+            default=['Ahmedabad','Amritsar', 'Chennai', 'Delhi', 'Jaipur', 'Lucknow', 'Mumbai','Patna'],
+            key="city",
+        )
+    with col2:
+        year = st.selectbox(
+            "Escolha um Ano",
+            options=AnnualAqiDataFrame.mount()["Year"].unique(),
+        )
+        
     col1, col2 = st.columns(2)
     with col1:
-        AqiMapPlotter({"year": year}).render()
+        AqiMapPlotter({"year": year, "city": cities}).render()
     with col2:
-        AqiSunburstPlotter({"year": year}).render()
+        AqiSunburstPlotter({"year": year,  "city": cities}).render()
 
 with tabs[1]:
     render_series()
