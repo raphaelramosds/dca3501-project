@@ -1,11 +1,10 @@
-import streamlit as st
-
 from pathlib import Path
 from abc import ABC, abstractmethod
 
 import pandas as pd
 
 parent_dir = Path(__file__).resolve().parent.parent
+
 
 class BaseDataFrame(ABC):
     path = None
@@ -19,7 +18,8 @@ class BaseDataFrame(ABC):
     @classmethod
     @abstractmethod
     def filter(cls, df: pd.DataFrame, filters: dict) -> pd.DataFrame:
-        pass
+        return df
+
 
 class AnnualAqiDataFrame(BaseDataFrame):
     path = "{}/data/dashboard_annual_aqi.csv".format(parent_dir)
@@ -28,15 +28,15 @@ class AnnualAqiDataFrame(BaseDataFrame):
     def filter(cls, df: pd.DataFrame, filters: dict) -> pd.DataFrame:
         mask = pd.Series(True, index=df.index)
 
-        if 'city' in filters:
-            cities = filters['city']
+        if "city" in filters:
+            cities = filters["city"]
             if isinstance(cities, list):
-                mask &= df['City'].isin(cities)
+                mask &= df["City"].isin(cities)
             else:
-                mask &= df['City'] == cities
+                mask &= df["City"] == cities
 
-        if 'year' in filters:
-            mask &= df['Year'] == filters['year']
+        if "year" in filters:
+            mask &= df["Year"] == filters["year"]
 
         return df[mask]
 
