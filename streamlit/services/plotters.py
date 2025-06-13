@@ -31,6 +31,15 @@ class AqiMapPlotter(Plotter):
     dataframe = AnnualAqiDataFrame
 
     def plot(self):
+        # Define a color scale for AQI 
+        color_scale = [
+            (0.0, "green"),       # Good
+            (0.2, "yellow"),      # Moderate
+            (0.4, "orange"),      # Poor
+            (0.6, "pink"),        # Unhealthy
+            (0.8, "purple"),      # Severe
+            (1.0, "maroon"),      # Hazardous
+        ]
         fig = px.scatter_mapbox(
             self.df,
             lat="Lat",
@@ -40,7 +49,8 @@ class AqiMapPlotter(Plotter):
             size="AQI",
             color="AQI",
             # TODO: turn color_discrete_map continous and set here for following the color scheme
-            color_continuous_scale="RdYlGn_r",
+            color_continuous_scale=color_scale,
+            range_color=[0, 300],
             zoom=4,
             center={"lat": 22.9734, "lon": 78.6569},
             height=600,
