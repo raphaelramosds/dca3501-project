@@ -3,7 +3,8 @@ import streamlit as st
 from services.dataframes import AnnualAqiDataFrame
 from services.plotters import *
 
-st.set_page_config(page_title="India Weather Dashboard", layout="wide")
+st.set_page_config(page_title="India Weather Dashboard", layout="wide", page_icon="https://hatscripts.github.io/circle-flags/flags/in.svg")
+
 
 st.title("India Weather Dashboard Analysis 🌤️")
 

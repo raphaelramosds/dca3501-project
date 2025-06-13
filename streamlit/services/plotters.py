@@ -48,7 +48,6 @@ class AqiMapPlotter(Plotter):
             hover_data={"AQI": True, "Lat": False, "Lon": False},
             size="AQI",
             color="AQI",
-            # TODO: turn color_discrete_map continous and set here for following the color scheme
             color_continuous_scale=color_scale,
             range_color=[0, 300],
             zoom=4,
