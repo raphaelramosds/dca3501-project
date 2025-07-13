@@ -41,3 +41,7 @@ Desenvolvimento de um dashboard contendo as principais informações obtidas na 
 - [![Jupyter](https://img.shields.io/badge/-Notebook-191A1B?style=flat-square&logo=jupyter)](./assignments/Trabalho%202%20-%20Dashboard.ipynb) Notebook responsável pela preparação dos arquivos CSV utilizados nos gráficos do dashboard dinâmico.
 
 - [![GoogleCloud](https://img.shields.io/badge/GoogleCloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white)](https://streamlit-app-147005502913.us-central1.run.app/) Página web onde o dashboard está hospedado.
+
+### Trabalho 3
+
+Incorporar uma funcionalidade baseada em aprendizagem de máquina (classificação, regressão ou agrupamento) no dashboard do trabalho anterior.
