@@ -1,9 +1,7 @@
 from abc import ABC, abstractmethod
 from services.dataframes import *
-from services.adapters import DataFrameAdapter
 
 import streamlit as st
-import pandas as pd
 import plotly.express as px
 
 
@@ -11,9 +9,7 @@ class Plotter(ABC):
     dataframe: type[BaseDataFrame]
 
     def __init__(self, filters: dict = {}):
-        self.filters: dict = filters
-        self.adapter = DataFrameAdapter(self.dataframe, self.filters)
-        self.df: pd.DataFrame = self.adapter.filter()
+        self.df = self.dataframe.filter(filters)
 
     def render(self):
         self.plot()

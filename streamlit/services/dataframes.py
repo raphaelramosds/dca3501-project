@@ -3,8 +3,7 @@ from abc import ABC, abstractmethod
 
 import pandas as pd
 
-parent_dir = Path(__file__).resolve().parent.parent
-
+data_dir = Path(__file__).resolve().parent.parent / "data"
 
 class BaseDataFrame(ABC):
     path = None
@@ -17,15 +16,17 @@ class BaseDataFrame(ABC):
 
     @classmethod
     @abstractmethod
-    def filter(cls, df: pd.DataFrame, filters: dict) -> pd.DataFrame:
-        return df
+    def filter(cls, filters: dict) -> pd.DataFrame:
+        return cls.mount()
 
 
 class AnnualAqiDataFrame(BaseDataFrame):
-    path = "{}/data/dashboard_annual_aqi.csv".format(parent_dir)
+    path = data_dir / "dashboard_annual_aqi.csv"
 
     @classmethod
-    def filter(cls, df: pd.DataFrame, filters: dict) -> pd.DataFrame:
+    def filter(cls, filters: dict) -> pd.DataFrame:
+        df = cls.mount()
+        
         mask = pd.Series(True, index=df.index)
 
         if "city" in filters:
@@ -42,4 +43,4 @@ class AnnualAqiDataFrame(BaseDataFrame):
 
 
 class MonthlyAqiParticlesDataFrame(BaseDataFrame):
-    path = "{}/data/dashboard_month_aqi_pm10_pm25.csv".format(parent_dir)
+    path = data_dir / "dashboard_month_aqi_pm10_pm25.csv"
