@@ -18,6 +18,7 @@ tabs = st.tabs(
     [
         "📊 IQA Anual",
         "📈 IQA x Matéria Particulada (PM)",
+        "ℹ️ Previsão de IQA",
     ]
 )
 
@@ -56,8 +57,29 @@ with tabs[0]:
 @st.cache_data
 def render_series():
     SeriesAqiParticlesPlotter({}).render()
+    
+def render_gauge():
+    AqiGaugePlotter({}).render()
 
 
 # Tab IQA x Matéria Particulada
 with tabs[1]:
     render_series()
+    
+
+with tabs[2]: 
+    st.markdown(
+        "Para prever o IQA, é necessário escolher uma cidade e um modelo de previsão."
+    )
+    col1, col2 = st.columns(2)
+    with col1:
+        city = st.selectbox(
+            "Escolha uma Cidade",
+            options=AnnualAqiDataFrame.mount()["City"].unique(),
+        )
+
+    if city:
+        st.write(f"Previsão do IQA para a cidade {city} usando o modelo RandomForest.")
+        # Aqui você pode adicionar a lógica para previsão com base no modelo escolhido.
+        
+        render_gauge();

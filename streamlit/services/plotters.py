@@ -3,6 +3,8 @@ from services.dataframes import *
 
 import streamlit as st
 import plotly.express as px
+import plotly.graph_objects as go
+import numpy as np
 
 
 class Plotter(ABC):
@@ -80,7 +82,65 @@ class AqiSunburstPlotter(Plotter):
 
         st.plotly_chart(fig, use_container_width=True)
 
+class AqiGaugePlotter(Plotter):
+    dataframe = AnnualAqiDataFrame
 
+    def plot(self):
+        # Valor de exemplo (substituir por self.df["AQI"].mean() depois)
+        aqi_value = 205
+
+        # Definir a cor da barra principal baseada no valor do AQI
+        if aqi_value <= 50:
+            bar_color = "#4CAF50"  # Verde vibrante
+        elif aqi_value <= 100:
+            bar_color = "#FFEB3B"  # Amarelo vibrante
+        elif aqi_value <= 200:
+            bar_color = "#FF9800"  # Laranja vibrante
+        elif aqi_value <= 300:
+            bar_color = "#F44336"  # Vermelho vibrante
+        elif aqi_value <= 400:
+            bar_color = "#9C27B0"  # Roxo vibrante
+        else:
+            bar_color = "#A24857"  # Marrom vibrante
+
+        # Definir as faixas de cores padrão
+        steps = [
+            {"range": [0, 50], "color": "#4CAF50"},     # Verde
+            {"range": [51, 100], "color": "#FFEB3B"},   # Amarelo
+            {"range": [101, 200], "color": "#FF9800"},  # Laranja
+            {"range": [201, 300], "color": "#F44336"},  # Vermelho
+            {"range": [301, 400], "color": "#9C27B0"}, # Roxo
+            {"range": [401, 500], "color": "#A24857"}  # Vinho
+        ]
+
+        fig = go.Figure(
+            go.Indicator(
+                mode="gauge+number+delta",
+                value=aqi_value,
+                delta={"reference": 100},
+                title={"text": f"AQI Médio: {aqi_value:.0f}"},
+                gauge={
+                    "axis": {"range": [None, 500]},
+                    "bar": {"color": bar_color, "thickness": 0},
+                    "steps": steps,
+                    "threshold": {
+                        "line": {"color": "black", "width": 5},
+                        "thickness": 0.85,
+                        "value": aqi_value
+                    }
+                },
+            )
+        )
+
+        fig.update_layout(
+            height=400,
+            width=600,
+            margin=dict(t=50, b=0, l=0, r=0),
+            font={"color": "white", "family": "Arial"}
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+        
 class SeriesAqiParticlesPlotter(Plotter):
     dataframe = MonthlyAqiParticlesDataFrame
 
