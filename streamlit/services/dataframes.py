@@ -44,3 +44,23 @@ class AnnualAqiDataFrame(BaseDataFrame):
 
 class MonthlyAqiParticlesDataFrame(BaseDataFrame):
     path = data_dir / "dashboard_month_aqi_pm10_pm25.csv"
+
+
+class AqiTimeSeriesDataFrame(BaseDataFrame):
+    path = data_dir / "dashboard_aqi_time_series.csv"
+
+    @classmethod
+    def mount(cls) -> pd.DataFrame:
+        return pd.read_csv(cls.path, index_col=['Date', 'City'])
+    
+    @classmethod
+    def filter(cls, filters: dict) -> pd.DataFrame:
+        df = cls.mount()
+        
+        mask = pd.Series(True, index=df.index)
+
+        if "city" in filters:
+            city = filters["city"]
+            mask &= df["City"] == city
+
+        return df[mask]
