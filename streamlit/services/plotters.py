@@ -120,7 +120,7 @@ class AqiGaugePlotter(Plotter):
                 mode="gauge+number+delta",
                 value=aqi_value,
                 delta={"reference": aqi_reference},
-                title={"text": f"AQI Médio: {aqi_value:.0f}"},
+                title={"text": f"Previsão"},
                 gauge={
                     "axis": {"range": [None, 500]},
                     "bar": {"color": bar_color, "thickness": 0},

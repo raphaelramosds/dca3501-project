@@ -63,11 +63,17 @@ with tabs[1]:
 
 # Tab Previsão de IQA
 with tabs[2]:
-    st.markdown("Previsão do AQI médio de uma cidade para o próximo mês.")
     col1, col2 = st.columns(2)
     with col1:
+        st.markdown("""
+        O indicador ao lado mostra a previsão do IQA para o mês seguinte ao último registro de qualidade do ar nesta cidade.
+                    
+        Além disso, também mostramos a variação prevista para o mês em questão.
+                    
+        **Observação:** Uma variação negativa significa que o IQA abaixou, implicando uma melhoria na qualidade do ar.
+        """)
         city = st.selectbox(
-            "Escolha uma Cidade",
+            "Escolha a cidade",
             options=AqiTimeSeriesDataFrame.list_cities(),
         )
     with col2:
