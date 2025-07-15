@@ -57,9 +57,10 @@ with tabs[0]:
 @st.cache_data
 def render_series():
     SeriesAqiParticlesPlotter({}).render()
-    
-def render_gauge():
-    AqiGaugePlotter({}).render()
+
+@st.cache_data
+def render_gauge(filters : dict = {}):
+    AqiGaugePlotter(filters).render()
 
 
 # Tab IQA x Matéria Particulada
@@ -67,19 +68,20 @@ with tabs[1]:
     render_series()
     
 
-with tabs[2]: 
+with tabs[2]:
     st.markdown(
         "Para prever o IQA, é necessário escolher uma cidade e um modelo de previsão."
     )
     col1, col2 = st.columns(2)
     with col1:
+        index_tuples = AqiTimeSeriesDataFrame.mount().index.to_list()
+        cities = set(index[1] for index in index_tuples)
+        cities = sorted(cities)
         city = st.selectbox(
             "Escolha uma Cidade",
-            options=AnnualAqiDataFrame.mount()["City"].unique(),
+            options=cities,
         )
 
     if city:
         st.write(f"Previsão do IQA para a cidade {city} usando o modelo RandomForest.")
-        # Aqui você pode adicionar a lógica para previsão com base no modelo escolhido.
-        
-        render_gauge();
+        render_gauge({"city": city});

@@ -60,7 +60,6 @@ class AqiTimeSeriesDataFrame(BaseDataFrame):
         mask = pd.Series(True, index=df.index)
 
         if "city" in filters:
-            city = filters["city"]
-            mask &= df["City"] == city
+            mask &= df.index.get_level_values(level=1) == filters["city"]
 
         return df[mask]

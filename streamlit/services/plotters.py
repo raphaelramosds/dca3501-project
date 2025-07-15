@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from services.dataframes import *
+from services.models import AqiForecasterModel
 
 import streamlit as st
 import plotly.express as px
@@ -83,11 +84,13 @@ class AqiSunburstPlotter(Plotter):
         st.plotly_chart(fig, use_container_width=True)
 
 class AqiGaugePlotter(Plotter):
-    dataframe = AnnualAqiDataFrame
+    dataframe = AqiTimeSeriesDataFrame
 
     def plot(self):
+        model = AqiForecasterModel(self.df)
         # Valor de exemplo (substituir por self.df["AQI"].mean() depois)
-        aqi_value = 205
+        # aqi_value = 250
+        aqi_value = model.get_aqi_fore()
 
         # Definir a cor da barra principal baseada no valor do AQI
         if aqi_value <= 50:
