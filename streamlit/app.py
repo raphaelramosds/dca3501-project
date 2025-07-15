@@ -11,7 +11,6 @@ st.set_page_config(
     page_icon="public/in.svg",
 )
 
-
 st.title("{} 🌤️".format(title))
 
 tabs = st.tabs(
@@ -28,7 +27,7 @@ with tabs[0]:
     with col1:
         cities = st.multiselect(
             "Escolha uma Cidade",
-            options=AnnualAqiDataFrame.mount()["City"].unique(),
+            options=AnnualAqiDataFrame.list_cities(),
             default=[
                 "Ahmedabad",
                 "Amritsar",
@@ -44,7 +43,7 @@ with tabs[0]:
     with col2:
         year = st.selectbox(
             "Escolha um Ano",
-            options=AnnualAqiDataFrame.mount()["Year"].unique(),
+            options=AnnualAqiDataFrame.list_years(),
         )
 
     col1, col2 = st.columns(2)
@@ -54,34 +53,25 @@ with tabs[0]:
         AqiSunburstPlotter({"year": year, "city": cities}).render()
 
 
-@st.cache_data
-def render_series():
-    SeriesAqiParticlesPlotter({}).render()
-
-@st.cache_data
-def render_gauge(filters : dict = {}):
-    AqiGaugePlotter(filters).render()
-
-
 # Tab IQA x Matéria Particulada
 with tabs[1]:
+    @st.cache_data
+    def render_series():
+        SeriesAqiParticlesPlotter({}).render()
     render_series()
     
 
+# Tab Previsão de IQA
 with tabs[2]:
-    st.markdown(
-        "Para prever o IQA, é necessário escolher uma cidade e um modelo de previsão."
-    )
+    st.markdown("Previsão do AQI médio de uma cidade para o próximo mês.")
     col1, col2 = st.columns(2)
     with col1:
-        index_tuples = AqiTimeSeriesDataFrame.mount().index.to_list()
-        cities = set(index[1] for index in index_tuples)
-        cities = sorted(cities)
         city = st.selectbox(
             "Escolha uma Cidade",
-            options=cities,
+            options=AqiTimeSeriesDataFrame.list_cities(),
         )
-
-    if city:
-        st.write(f"Previsão do IQA para a cidade {city} usando o modelo RandomForest.")
-        render_gauge({"city": city});
+    with col2:
+        @st.cache_data
+        def render_gauge(filters : dict = {}):
+            AqiGaugePlotter(filters).render()
+        render_gauge({"city": city} if city else {});

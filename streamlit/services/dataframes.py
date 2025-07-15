@@ -40,6 +40,14 @@ class AnnualAqiDataFrame(BaseDataFrame):
             mask &= df["Year"] == filters["year"]
 
         return df[mask]
+    
+    @classmethod
+    def list_years(cls) -> list[str]:
+        return cls.mount()["Year"].unique()
+    
+    @classmethod
+    def list_cities(cls) -> list[str]:
+        return cls.mount()["City"].unique()
 
 
 class MonthlyAqiParticlesDataFrame(BaseDataFrame):
@@ -63,3 +71,11 @@ class AqiTimeSeriesDataFrame(BaseDataFrame):
             mask &= df.index.get_level_values(level=1) == filters["city"]
 
         return df[mask]
+    
+    @classmethod
+    def list_cities(cls) -> list[str]:
+        df = cls.mount()
+        index_tuples = df.index.to_list()
+        cities = set(index[1] for index in index_tuples)
+        cities_sorted_asc = sorted(cities)
+        return cities_sorted_asc
