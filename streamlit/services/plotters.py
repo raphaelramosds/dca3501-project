@@ -88,9 +88,8 @@ class AqiGaugePlotter(Plotter):
 
     def plot(self):
         model = AqiForecasterModel(self.df)
-        # Valor de exemplo (substituir por self.df["AQI"].mean() depois)
-        # aqi_value = 250
         aqi_value = model.get_aqi_fore()
+        aqi_reference = model.get_aqi_reference()
 
         # Definir a cor da barra principal baseada no valor do AQI
         if aqi_value <= 50:
@@ -120,7 +119,7 @@ class AqiGaugePlotter(Plotter):
             go.Indicator(
                 mode="gauge+number+delta",
                 value=aqi_value,
-                delta={"reference": 100},
+                delta={"reference": aqi_reference},
                 title={"text": f"AQI Médio: {aqi_value:.0f}"},
                 gauge={
                     "axis": {"range": [None, 500]},
