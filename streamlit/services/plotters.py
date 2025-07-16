@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
 from services.dataframes import *
 from services.models import AqiForecasterModel
 
@@ -139,6 +140,50 @@ class AqiGaugePlotter(Plotter):
             width=600,
             margin=dict(t=50, b=0, l=0, r=0),
             font={"color": "white", "family": "Arial"}
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+    
+class AqiTimeSeriesPlotter(Plotter):
+    dataframe = AqiTimeSeriesDataFrame
+
+    def plot(self):
+        
+        # Calcular a média móvel do AQI
+        aqi_trend = self.df.rolling(
+            window=12,
+            center=True,
+            min_periods=6,
+        ).mean()
+
+        # Converter índices Period para Datetime64
+        months = self.df.index.get_level_values(level=0)
+        month_axis = [datetime.strptime(month, "%Y-%m").strftime("%Y-%m-%d") for month in months]
+        
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(
+            x=month_axis,
+            y=self.df['AQI'],
+            mode='lines',
+            name='AQI',
+            line=dict(color='lightgray'),
+        ))
+
+        fig.add_trace(go.Scatter(
+            x=month_axis,
+            y=aqi_trend['AQI'],
+            mode='lines',
+            name='Média Móvel',
+            line=dict(color='blue', width=3),
+        ))
+
+        fig.update_layout(
+            title='Evolução do Índice de Qualidade do Ar',
+            xaxis_title='Data',
+            yaxis_title='AQI',
+            legend=dict(x=0.01, y=0.99),
+            template='plotly_white',
         )
 
         st.plotly_chart(fig, use_container_width=True)

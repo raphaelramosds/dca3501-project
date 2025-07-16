@@ -81,3 +81,5 @@ with tabs[2]:
         def render_gauge(filters : dict = {}):
             AqiGaugePlotter(filters).render()
         render_gauge({"city": city} if city else {});
+
+    AqiTimeSeriesPlotter({"city": city} if city else {}).render()
