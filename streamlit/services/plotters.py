@@ -120,7 +120,11 @@ class AqiGaugePlotter(Plotter):
             go.Indicator(
                 mode="gauge+number+delta",
                 value=aqi_value,
-                delta={"reference": aqi_reference},
+                delta={
+                    "reference": aqi_reference,
+                    "increasing": {"color": "red"},
+                    "decreasing": {"color": "green"},
+                },
                 title={"text": f"Previsão"},
                 gauge={
                     "axis": {"range": [None, 500]},
