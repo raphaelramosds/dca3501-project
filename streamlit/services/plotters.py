@@ -48,7 +48,7 @@ class AqiMapPlotter(Plotter):
             range_color=[0, 300],
             zoom=4,
             center={"lat": 22.9734, "lon": 78.6569},
-            height=600,
+            height=400,
         )
         fig.update_layout(
             mapbox_style="carto-positron",
@@ -79,7 +79,7 @@ class AqiSunburstPlotter(Plotter):
         )
 
         fig.update_layout(
-            height=600,
+            height=450,
         )
 
         st.plotly_chart(fig, use_container_width=True)
@@ -226,8 +226,8 @@ class SeriesAqiParticlesPlotter(Plotter):
         fig.update_layout(
             xaxis_title="Concentração média de PM2.5",
             yaxis_title="Concentração média de PM10",
-            margin=dict(l=40, r=40, t=60, b=40),
-            height=700,
+            margin=dict(l=10, r=10, t=30, b=10),
+            height=500,
         )
 
         st.plotly_chart(fig, use_container_width=True)

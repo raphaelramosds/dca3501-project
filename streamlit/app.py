@@ -61,7 +61,8 @@ with tabs[2]:
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("""
-        O indicador a seguir mostram a previsão do IQA para o mês seguinte ao último registro de qualidade do ar nesta cidade. Além disso, também mostramos a variação prevista para o mês em questão. Uma variação negativa significa que o IQA abaixou, implicando uma melhoria na qualidade do ar.
+        O indicador a seguir mostram a previsão do IQA para o mês seguinte ao último registro de qualidade do ar nesta cidade. Além disso, também mostramos a variação prevista para o mês em questão.
+        **Observe:** Uma variação negativa significa que o IQA abaixou, implicando uma melhoria na qualidade do ar.
         """)
 
     with col2:
