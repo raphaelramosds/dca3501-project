@@ -30,20 +30,15 @@ with tabs[0]:
             options=AnnualAqiDataFrame.list_cities(),
             default=[
                 "Ahmedabad",
-                "Amritsar",
-                "Chennai",
                 "Delhi",
-                "Jaipur",
-                "Lucknow",
                 "Mumbai",
-                "Patna",
             ],
             key="city",
         )
     with col2:
         year = st.selectbox(
-            "Escolha um Ano",
-            options=AnnualAqiDataFrame.list_years(),
+            "Escolha um Ano", 
+            options=AnnualAqiDataFrame.list_years()
         )
 
     col1, col2 = st.columns(2)
@@ -66,20 +61,18 @@ with tabs[2]:
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("""
-        O indicador ao lado mostra a previsão do IQA para o mês seguinte ao último registro de qualidade do ar nesta cidade.
-                    
-        Além disso, também mostramos a variação prevista para o mês em questão.
-                    
-        **Observação:** Uma variação negativa significa que o IQA abaixou, implicando uma melhoria na qualidade do ar.
+        O indicador a seguir mostram a previsão do IQA para o mês seguinte ao último registro de qualidade do ar nesta cidade. Além disso, também mostramos a variação prevista para o mês em questão. Uma variação negativa significa que o IQA abaixou, implicando uma melhoria na qualidade do ar.
         """)
+
+    with col2:
         city = st.selectbox(
             "Escolha a cidade",
-            options=AqiTimeSeriesDataFrame.list_cities(),
+            options=AqiTimeSeriesDataFrame.list_cities(), 
         )
-    with col2:
-        @st.cache_data
-        def render_gauge(filters : dict = {}):
-            AqiGaugePlotter(filters).render()
-        render_gauge({"city": city} if city else {});
 
-    AqiTimeSeriesPlotter({"city": city} if city else {}).render()
+    col3, col4 = st.columns(2)
+    with col3:
+        AqiTimeSeriesPlotter({"city": city} if city else {}).render()
+
+    with col4:
+        AqiGaugePlotter({"city": city} if city else {}).render()

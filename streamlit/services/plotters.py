@@ -89,7 +89,7 @@ class AqiGaugePlotter(Plotter):
 
     def plot(self):
         model = AqiForecasterModel(self.df)
-        aqi_value = model.get_aqi_fore()
+        aqi_value = model.get_y_fore_one()
         aqi_reference = model.get_aqi_reference()
 
         # Definir a cor da barra principal baseada no valor do AQI
@@ -136,9 +136,9 @@ class AqiGaugePlotter(Plotter):
         )
 
         fig.update_layout(
-            height=400,
-            width=600,
-            margin=dict(t=50, b=0, l=0, r=0),
+            height=350,
+            width=700,
+            margin=dict(t=80, b=0, l=0, r=0),
             font={"color": "white", "family": "Arial"}
         )
 
@@ -165,7 +165,7 @@ class AqiTimeSeriesPlotter(Plotter):
         fig.add_trace(go.Scatter(
             x=month_axis,
             y=self.df['AQI'],
-            mode='lines',
+            mode='lines+markers',
             name='AQI',
             line=dict(color='lightgray'),
         ))
@@ -175,7 +175,8 @@ class AqiTimeSeriesPlotter(Plotter):
             y=aqi_trend['AQI'],
             mode='lines',
             name='Média Móvel',
-            line=dict(color='blue', width=3),
+            line=dict(width=5),
+            fill='tozeroy'
         ))
 
         fig.update_layout(
